@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en" data-theme="{{.Prefs.Theme}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{.CSRFToken}}">
+  <meta name="max-file-bytes" content="{{.MaxFileBytes}}">
+  <meta name="color-scheme" content="light dark">
+  <title>Inkwell — Markdown Editor</title>
+  <link rel="icon" href="/static/images/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/css/app.css">
+  <link rel="stylesheet" href="/static/css/document.css">
+  <link rel="stylesheet" href="/assets/highlight.css">
+  <script type="application/json" id="initial-prefs">{{.Prefs}}</script>
+  <script type="module" src="/static/js/app.js"></script>
+</head>
+<body data-view="{{.Prefs.ViewMode}}">
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12m0 0-4-4m4 4 4-4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></symbol>
+    <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></symbol>
+    <symbol id="i-bold" viewBox="0 0 24 24"><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/></symbol>
+    <symbol id="i-italic" viewBox="0 0 24 24"><path d="M10 5h8M6 19h8M14 5l-4 14"/></symbol>
+    <symbol id="i-strike" viewBox="0 0 24 24"><path d="M4 12h16M16 7.5C15.4 5.9 13.9 5 12 5c-2.5 0-4 1.3-4 3 0 1.2.7 2.2 2 2.8M8 16.5c.6 1.6 2.1 2.5 4 2.5 2.5 0 4-1.3 4-3"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4"/></symbol>
+    <symbol id="i-codeblock" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m10 10-2 2 2 2M14 10l2 2-2 2"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24"><path d="M6 7v10M10 9h9M10 15h6"/></symbol>
+    <symbol id="i-ul" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
+    <symbol id="i-ol" viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10M4 5l1.5-1v5M3.5 14.5a1.5 1.5 0 1 1 2.5 1.2L3.5 19H6.5"/></symbol>
+    <symbol id="i-task" viewBox="0 0 24 24"><rect x="3" y="4" width="6" height="6" rx="1"/><path d="m4.5 7 1.2 1.2L8 5.8M13 7h8M13 17h8"/><rect x="3" y="14" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></symbol>
+    <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/></symbol>
+    <symbol id="i-hr" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M7 7h10M7 17h10" opacity=".4"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></symbol>
+    <symbol id="i-focus" viewBox="0 0 24 24"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  </svg>
+
+  <div class="app" id="app">
+    <header class="topbar">
+      <button class="icon-btn sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Toggle document list" aria-controls="sidebar" aria-expanded="false">
+        <svg class="icon"><use href="#i-menu"/></svg>
+      </button>
+      <a class="brand" href="/" aria-label="Inkwell home">
+        <img src="/static/images/logo.svg" alt="" width="26" height="26">
+        <span class="brand-name">Inkwell</span>
+      </a>
+      <div class="doc-title-wrap">
+        <input class="doc-title" id="doc-title" type="text" maxlength="200" autocomplete="off" spellcheck="false" aria-label="Document title" placeholder="Untitled">
+        <span class="dirty-dot" id="dirty-dot" title="Unsaved changes" hidden></span>
+      </div>
+      <button class="save-status" id="save-status" type="button" data-state="saved" aria-live="polite" title="Save now (Ctrl+S)">
+        <span class="save-status-dot" aria-hidden="true"></span><span class="save-status-text" id="save-status-text">Saved</span>
+      </button>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" id="import-btn" type="button" title="Import a .md or .markdown file">
+          <svg class="icon"><use href="#i-upload"/></svg><span class="btn-label">Import</span>
+        </button>
+        <input type="file" id="import-input" accept=".md,.markdown,text/markdown" hidden>
+        <div class="menu" id="export-menu">
+          <button class="btn btn-ghost" id="export-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="export-list">
+            <svg class="icon"><use href="#i-download"/></svg><span class="btn-label">Export</span><svg class="icon icon-sm"><use href="#i-chevron"/></svg>
+          </button>
+          <div class="menu-list" id="export-list" role="menu" hidden>
+            <button type="button" role="menuitem" data-export="md">Markdown <span class="menu-hint">.md</span></button>
+            <button type="button" role="menuitem" data-export="html">HTML <span class="menu-hint">.html</span></button>
+            <button type="button" role="menuitem" data-export="pdf">PDF <span class="menu-hint">print dialog</span></button>
+          </div>
+        </div>
+        <span class="topbar-sep" aria-hidden="true"></span>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+          <svg class="icon icon-light"><use href="#i-moon"/></svg>
+          <svg class="icon icon-dark"><use href="#i-sun"/></svg>
+        </button>
+        <button class="icon-btn" id="shortcuts-btn" type="button" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (Ctrl+/)">
+          <svg class="icon"><use href="#i-keyboard"/></svg>
+        </button>
+        <button class="icon-btn" id="settings-btn" type="button" aria-label="Editor settings" title="Editor settings">
+          <svg class="icon"><use href="#i-settings"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar" aria-label="Documents">
+      <div class="sidebar-top">
+        <button class="btn btn-primary btn-block" id="new-doc" type="button" title="New document (Ctrl+N / Ctrl+Alt+N)">
+          <svg class="icon"><use href="#i-plus"/></svg>New document
+        </button>
+        <label class="search">
+          <svg class="icon"><use href="#i-search"/></svg>
+          <input type="search" id="search" placeholder="Search documents" aria-label="Search documents by title and content" autocomplete="off" maxlength="200">
+        </label>
+        <label class="sort">
+          <span>Sort</span>
+          <select id="sort" aria-label="Sort documents">
+            <option value="updated-desc">Last modified</option>
+            <option value="updated-asc">Least recently modified</option>
+            <option value="created-desc">Newest created</option>
+            <option value="created-asc">Oldest created</option>
+            <option value="title-asc">Title A–Z</option>
+            <option value="title-desc">Title Z–A</option>
+          </select>
+        </label>
+      </div>
+      <div class="sidebar-scroll">
+        <section class="doc-section" id="recent-section">
+          <h2 class="section-title">Recently edited</h2>
+          <ul class="doc-list" id="recent-list"></ul>
+        </section>
+        <section class="doc-section">
+          <h2 class="section-title"><span id="all-title">All documents</span> <span class="count" id="doc-count"></span></h2>
+          <ul class="doc-list" id="doc-list"></ul>
+          <p class="empty-hint" id="empty-hint" hidden></p>
+        </section>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
+    <main class="workspace">
+      <div class="toolbar" role="toolbar" aria-label="Formatting" id="toolbar">
+        <div class="tool-group">
+          <select class="heading-select" id="heading-select" aria-label="Heading level" title="Heading level">
+            <option value="" selected disabled hidden>Heading</option>
+            <option value="0">Paragraph</option>
+            <option value="1">Heading 1</option>
+            <option value="2">Heading 2</option>
+            <option value="3">Heading 3</option>
+            <option value="4">Heading 4</option>
+            <option value="5">Heading 5</option>
+            <option value="6">Heading 6</option>
+          </select>
+        </div>
+        <div class="tool-group">
+          <button class="tool" type="button" data-format="bold" title="Bold (Ctrl+B)" aria-label="Bold"><svg class="icon"><use href="#i-bold"/></svg></button>
+          <button class="tool" type="button" data-format="italic" title="Italic (Ctrl+I)" aria-label="Italic"><svg class="icon"><use href="#i-italic"/></svg></button>
+          <button class="tool" type="button" data-format="strike" title="Strikethrough" aria-label="Strikethrough"><svg class="icon"><use href="#i-strike"/></svg></button>
+          <button class="tool" type="button" data-format="code" title="Inline code" aria-label="Inline code"><svg class="icon"><use href="#i-code"/></svg></button>
+        </div>
+        <div class="tool-group">
+          <button class="tool" type="button" data-format="codeblock" title="Code block" aria-label="Code block"><svg class="icon"><use href="#i-codeblock"/></svg></button>
+          <button class="tool" type="button" data-format="quote" title="Blockquote" aria-label="Blockquote"><svg class="icon"><use href="#i-quote"/></svg></button>
+          <button class="tool" type="button" data-format="ul" title="Bulleted list" aria-label="Bulleted list"><svg class="icon"><use href="#i-ul"/></svg></button>
+          <button class="tool" type="button" data-format="ol" title="Numbered list" aria-label="Numbered list"><svg class="icon"><use href="#i-ol"/></svg></button>
+          <button class="tool" type="button" data-format="task" title="Task list" aria-label="Task list"><svg class="icon"><use href="#i-task"/></svg></button>
+        </div>
+        <div class="tool-group">
+          <button class="tool" type="button" data-format="link" title="Link (Ctrl+K)" aria-label="Link"><svg class="icon"><use href="#i-link"/></svg></button>
+          <button class="tool" type="button" data-format="image" title="Image" aria-label="Image"><svg class="icon"><use href="#i-image"/></svg></button>
+          <button class="tool" type="button" data-format="table" title="Table" aria-label="Table"><svg class="icon"><use href="#i-table"/></svg></button>
+          <button class="tool" type="button" data-format="hr" title="Horizontal rule" aria-label="Horizontal rule"><svg class="icon"><use href="#i-hr"/></svg></button>
+        </div>
+        <div class="tool-group">
+          <button class="tool" type="button" id="undo-btn" title="Undo (Ctrl+Z)" aria-label="Undo"><svg class="icon"><use href="#i-undo"/></svg></button>
+          <button class="tool" type="button" id="redo-btn" title="Redo (Ctrl+Shift+Z)" aria-label="Redo"><svg class="icon"><use href="#i-redo"/></svg></button>
+        </div>
+        <div class="toolbar-spacer"></div>
+        <div class="segmented" role="group" aria-label="View mode">
+          <button type="button" data-view="editor" aria-pressed="false" title="Editor only">Editor</button>
+          <button type="button" data-view="split" class="seg-split" aria-pressed="false" title="Split view">Split</button>
+          <button type="button" data-view="preview" aria-pressed="false" title="Preview only (Ctrl+Shift+P)">Preview</button>
+        </div>
+        <button class="tool" type="button" id="focus-btn" title="Distraction-free mode (Ctrl+Shift+F)" aria-label="Distraction-free mode"><svg class="icon"><use href="#i-focus"/></svg></button>
+      </div>
+
+      <div class="panes" id="panes">
+        <section class="pane editor-pane" id="editor-pane" aria-label="Markdown editor">
+          <div class="editor-scroll" id="editor-scroll">
+            <div class="editor-inner">
+              <pre class="editor-highlight" id="editor-highlight" aria-hidden="true"></pre>
+              <textarea class="editor-input" id="editor" spellcheck="true" autocapitalize="sentences" aria-label="Markdown source" aria-describedby="editor-help" placeholder="Start writing Markdown…"></textarea>
+            </div>
+          </div>
+          <p class="sr-only" id="editor-help">Tab indents. Press Escape to leave the editor with the keyboard.</p>
+        </section>
+        <div class="resizer" id="resizer" role="separator" aria-orientation="vertical" aria-label="Resize editor and preview" tabindex="0" aria-valuemin="20" aria-valuemax="80"></div>
+        <section class="pane preview-pane" id="preview-pane" aria-label="Preview">
+          <div class="preview-scroll" id="preview-scroll">
+            <article class="markdown-body" id="preview"></article>
+          </div>
+        </section>
+      </div>
+
+      <footer class="statusbar">
+        <span id="stat-words">0 words</span>
+        <span id="stat-chars">0 characters</span>
+        <span id="stat-reading">0 min read</span>
+        <span class="statusbar-spacer"></span>
+        <span id="stat-cursor">Ln 1, Col 1</span>
+        <span class="statusbar-muted">Markdown</span>
+      </footer>
+    </main>
+  </div>
+
+  <button class="focus-exit" id="focus-exit" type="button">Exit focus mode <kbd>Esc</kbd></button>
+  <div class="drop-overlay" id="drop-overlay" hidden><div>Drop a .md file to import it</div></div>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <dialog class="dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+    <form method="dialog">
+      <h2 class="dialog-title" id="confirm-title">Are you sure?</h2>
+      <p class="dialog-body" id="confirm-message"></p>
+      <div class="dialog-actions">
+        <button class="btn" value="cancel" id="confirm-cancel">Cancel</button>
+        <button class="btn btn-primary" value="ok" id="confirm-ok">OK</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="prompt-dialog" aria-labelledby="prompt-title">
+    <form method="dialog" id="prompt-form">
+      <h2 class="dialog-title" id="prompt-title">Rename document</h2>
+      <label class="field">
+        <span id="prompt-label">Title</span>
+        <input type="text" id="prompt-input" maxlength="200" required autocomplete="off">
+      </label>
+      <div class="dialog-actions">
+        <button class="btn" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn btn-primary" value="ok" id="prompt-ok">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="settings-dialog" aria-labelledby="settings-title">
+    <form method="dialog">
+      <h2 class="dialog-title" id="settings-title">Editor settings</h2>
+      <label class="field field-row">
+        <span>Theme</span>
+        <select id="set-theme">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <label class="field field-row">
+        <span>Font family</span>
+        <select id="set-font-family">
+          {{range .FontFamilies}}<option value="{{.Key}}">{{.Label}}</option>{{end}}
+        </select>
+      </label>
+      <label class="field">
+        <span>Font size <output id="out-font-size"></output></span>
+        <input type="range" id="set-font-size" min="12" max="28" step="1">
+      </label>
+      <label class="field">
+        <span>Line spacing <output id="out-line-height"></output></span>
+        <input type="range" id="set-line-height" min="1.2" max="2.4" step="0.1">
+      </label>
+      <div class="dialog-actions">
+        <button class="btn" type="button" id="settings-reset">Reset to defaults</button>
+        <button class="btn btn-primary" value="close">Done</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog dialog-wide" id="shortcuts-dialog" aria-labelledby="shortcuts-title">
+    <form method="dialog">
+      <h2 class="dialog-title" id="shortcuts-title">Keyboard shortcuts</h2>
+      <p class="dialog-note">On macOS use <kbd>⌘ Cmd</kbd> instead of <kbd>Ctrl</kbd>.</p>
+      <table class="shortcuts">
+        <tbody>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td>Save document</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>B</kbd></td><td>Bold</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>I</kbd></td><td>Italic</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td><td>Insert link</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td><td>Toggle preview</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd> <span class="muted">or</span> <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd></td><td>New document <span class="muted">(some browsers reserve Ctrl+N)</span></td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td><td>Undo</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> <span class="muted">or</span> <kbd>Ctrl</kbd> + <kbd>Y</kbd></td><td>Redo</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd></td><td>Distraction-free mode</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Exit distraction-free mode / leave the editor</td></tr>
+          <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd> + <kbd>Tab</kbd></td><td>Indent / outdent</td></tr>
+          <tr><td><kbd>Enter</kbd></td><td>New line, continuing lists and quotes</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>/</kbd></td><td>Show this list</td></tr>
+        </tbody>
+      </table>
+      <div class="dialog-actions">
+        <button class="btn btn-primary" value="close">Close</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
