@@ -104,6 +104,9 @@ func (s *Server) Routes() http.Handler {
 		w.Header().Set("Cache-Control", "no-cache")
 		io.WriteString(w, markdown.HighlightCSS())
 	})
+	mux.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFileFS(w, r, s.static, "images/logo.svg")
+	})
 
 	// Documents API.
 	mux.HandleFunc("GET /api/documents", s.handleListDocuments)

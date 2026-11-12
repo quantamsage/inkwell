@@ -684,6 +684,9 @@ body.focus-mode .hl-line.active { background: none; box-shadow: none; }
 /* Small screens: never side-by-side. "Split" behaves like the editor. */
 @media (max-width: 768px) {
   .seg-split { display: none; }
+  /* Keep the editor/preview switch reachable while the toolbar scrolls. */
+  .segmented { position: sticky; right: 0; z-index: 1; box-shadow: -12px 0 8px var(--bg); }
+  .toolbar-spacer { min-width: var(--s1); }
   body[data-view="split"] .panes { grid-template-columns: minmax(0, 1fr); }
   body[data-view="split"] .preview-pane,
   body[data-view="split"] .resizer { display: none; }

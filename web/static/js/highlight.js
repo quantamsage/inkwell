@@ -159,7 +159,8 @@ export function highlight(text) {
       html = highlightBlockLine(line);
     }
     // Empty lines need content to keep their height.
-    out[i] = `<div class="${cls}">${html || '<br>'}</div>`;
+    // (An empty <span> would collapse the line to zero height.)
+    out[i] = `<div class="${cls}">${line === '' ? '<br>' : html}</div>`;
   }
   return out.join('');
 }

@@ -119,6 +119,7 @@
 .markdown-body code,
 .markdown-body kbd,
 .markdown-body pre {
+  tab-size: 4;
   font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 0.875em;
 }
