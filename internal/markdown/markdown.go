@@ -127,7 +127,12 @@ func buildHighlightCSS() string {
 	dark := styleCSS(styles.Get("github-dark"))
 	dark = strings.ReplaceAll(dark, ".chroma", `[data-theme="dark"] .chroma`)
 	dark = strings.ReplaceAll(dark, ".bg ", `[data-theme="dark"] .bg `)
-	return light + "\n" + dark
+	// Tokens the dark theme leaves unstyled would otherwise keep the light
+	// theme's dark text colors (".chroma .nx") and be unreadable. This reset
+	// (specificity 0,2,1) beats the light rules (0,2,0) but loses to the dark
+	// token rules (0,3,0), so those tokens inherit the dark base color.
+	reset := `/* Dark reset */ [data-theme="dark"] .chroma span { color: inherit; background-color: transparent; }`
+	return light + "\n" + reset + "\n" + dark
 }
 
 func styleCSS(style *chroma.Style) string {

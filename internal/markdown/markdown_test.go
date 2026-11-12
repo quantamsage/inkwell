@@ -150,6 +150,13 @@ func TestHighlightCSS(t *testing.T) {
 	if !strings.Contains(css, `[data-theme="dark"] .chroma .k`) {
 		t.Fatal("dark theme rules missing")
 	}
+	// Unstyled dark tokens must not inherit light-theme colors, and the
+	// reset must come before the dark token rules so those still apply.
+	reset := strings.Index(css, `[data-theme="dark"] .chroma span { color: inherit`)
+	darkKeyword := strings.Index(css, `[data-theme="dark"] .chroma .k`)
+	if reset < 0 || reset > darkKeyword {
+		t.Fatal("dark reset rule missing or misplaced")
+	}
 	if strings.Contains(LightHighlightCSS(), "data-theme") {
 		t.Fatal("light-only CSS must not contain dark rules")
 	}
