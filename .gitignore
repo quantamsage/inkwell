@@ -1,0 +1,18 @@
+# Binaries
+/markdown-editor
+/markdown-editor.exe
+*.exe
+*.test
+*.out
+
+# Local database files
+/data/
+*.db
+*.db-shm
+*.db-wal
+
+# Editor / OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
