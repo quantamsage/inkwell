@@ -107,7 +107,8 @@ func NewService(store Store, maxContentBytes int64) *Service {
 	return &Service{
 		store:           store,
 		maxContentBytes: int(maxContentBytes),
-		now:             func() time.Time { return time.Now().UTC() },
+		// Timestamps are stored with millisecond precision.
+		now: func() time.Time { return time.Now().UTC().Truncate(time.Millisecond) },
 	}
 }
 
