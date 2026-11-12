@@ -350,16 +350,6 @@ function onContentForPreview() {
   if (editor.value.length > 200_000) scheduleLargePreview(); else schedulePreview();
 }
 
-function syncPreviewScroll() {
-  if (el.body.dataset.view !== 'split' || !isPreviewVisible()) return;
-  const src = el.editorScroll;
-  const max = src.scrollHeight - src.clientHeight;
-  if (max <= 0) return;
-  const ratio = src.scrollTop / max;
-  const dst = el.previewScroll;
-  dst.scrollTop = ratio * (dst.scrollHeight - dst.clientHeight);
-}
-
 // In-document anchor links (e.g. footnotes, headings) scroll the preview.
 el.preview.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="#"]');
@@ -948,7 +938,6 @@ function bindEvents() {
     onContentForPreview();
     scheduleStats();
   });
-  el.editorScroll.addEventListener('scroll', syncPreviewScroll, { passive: true });
 
   el.title.addEventListener('input', () => {
     refreshSaveStatus();
