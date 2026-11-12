@@ -7,6 +7,26 @@ automatically, and you can import and export Markdown, HTML and PDF.
 It is built with Go, the standard library, `html/template`, plain CSS and vanilla JavaScript. It uses
 no frontend framework, no build step and no cgo.
 
+![Inkwell in split view with the light theme: document sidebar, highlighted Markdown editor and live preview](docs/screenshots/editor-light.png)
+
+## Screenshots
+
+**Dark theme**, with a syntax-highlighted code block and a table in the preview:
+
+![Dark theme showing a Go code block and a table in the editor and the preview](docs/screenshots/editor-dark.png)
+
+**Distraction-free mode** hides everything except the text (press Esc to exit):
+
+![Distraction-free mode with a centered editor column on a dark background](docs/screenshots/focus-mode.png)
+
+**On a phone**, the editor and the preview are shown one at a time:
+
+<p align="center">
+  <img src="docs/screenshots/mobile-editor.png" alt="Mobile layout showing the Markdown editor" width="300">
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/mobile-preview.png" alt="Mobile layout showing the rendered preview" width="300">
+</p>
+
 ## Features
 
 - **Editor:** line numbers, Markdown syntax highlighting, auto-indentation, list and blockquote
